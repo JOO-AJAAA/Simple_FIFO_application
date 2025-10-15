@@ -1,0 +1,86 @@
+[
+    {
+        "nama_makanan": "Nasi Goreng Spesial",
+        "lama_dibuat": 10,
+        "harga": 27000,
+        "emoji": "/data/img/imageFood1.png"
+    },
+    {
+        "nama_makanan": "Mie Ayam",
+        "lama_dibuat": 7,
+        "harga": 19000,
+        "emoji": "/data/img/imageFood2.png"
+    },
+    {
+        "nama_makanan": "Sate Ayam",
+        "lama_dibuat": 15,
+        "harga": 32000,
+        "emoji": "/data/img/imageFood3.png"
+    },
+    {
+        "nama_makanan": "Es Teh Manis",
+        "lama_dibuat": 2,
+        "harga": 8000,
+        "emoji": "/data/img/imageDrink1.png"
+    },
+    {
+        "nama_makanan": "Gado-Gado",
+        "lama_dibuat": 6,
+        "harga": 21000,
+        "emoji": "/data/img/imageFood4.png"
+    },
+    {
+        "nama_makanan": "Ayam Goreng",
+        "lama_dibuat": 13,
+        "harga": 29000,
+        "emoji": "/data/img/imageFood5.png"
+    },
+    {
+        "nama_makanan": "Soto Ayam",
+        "lama_dibuat": 9,
+        "harga": 23000,
+        "emoji": "/data/img/imageFood6.png"
+    },
+    {
+        "nama_makanan": "Bakso Urat",
+        "lama_dibuat": 8,
+        "harga": 20000,
+        "emoji": "/data/img/imageFood7.png"
+    },
+    {
+        "nama_makanan": "Nasi Padang",
+        "lama_dibuat": 10,
+        "harga": 35000,
+        "emoji": "/data/img/imageFood8.png"
+    },
+    {
+        "nama_makanan": "Jus Alpukat",
+        "lama_dibuat": 4,
+        "harga": 15000,
+        "emoji": "/data/img/imageDrink2.png"
+    },
+    {
+        "nama_makanan": "Rendang Daging",
+        "lama_dibuat": 20,
+        "harga": 40000,
+        "emoji": "/data/img/imageFood9.png"
+    },
+    {
+        "nama_makanan": "Pecel Lele",
+        "lama_dibuat": 12,
+        "harga": 25000,
+        "emoji": "/data/img/imageFood10.png"
+    },
+    {
+        "nama_makanan": "Es Jeruk",
+        "lama_dibuat": 3,
+        "harga": 9000,
+        "emoji": "/data/img/imageDrink3.png"
+    },
+    {
+        "nama_makanan": "Nasi Uduk",
+        "lama_dibuat": 7,
+        "harga": 18000,
+        "emoji": "/data/img/imageFood11.png"
+    }
+]

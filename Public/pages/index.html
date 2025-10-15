@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penyelesaian Soal FCFS / FIFO</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .gantt-chart-title {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .gantt-container {
+      border: 2px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+      background: #fff;
+      display: flex;
+      height: 60px;
+      margin-bottom: 0;
+    }
+
+    .gantt-bar {
+      border-right: 2px solid #000;
+      font-weight: bold;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      font-size: 1.1em;
+      transition: all 0.3s;
+    }
+
+    .gantt-bar:last-child {
+      border-right: none;
+    }
+
+    .gantt-bar:hover {
+      filter: brightness(0.9);
+      transform: scale(1.02);
+    }
+
+    .gantt-timeline {
+      display: flex;
+      position: relative;
+      border-left: 2px solid #000;
+      border-right: 2px solid #000;
+      border-bottom: 2px solid #000;
+      background: #f8f9fa;
+    }
+
+    .gantt-time-marker {
+      flex: 1;
+      text-align: center;
+      font-weight: bold;
+      padding: 8px 0;
+      border-right: 2px solid #000;
+      font-size: 1.1em;
+      color: #000;
+    }
+
+    .gantt-time-marker:last-child {
+      border-right: none;
+    }
+
+    @keyframes growBar {
+      from {
+        width: 0;
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .card {
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+
+    .result-summary {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      border-left: 5px solid #667eea;
+    }
+
+    .result-summary p {
+      margin-bottom: 8px;
+      font-size: 1.05em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container my-4">
+    <h1 class="mb-4 text-center text-warning-emphasis">Penyelesaian Soal FCFS / FIFO</h1>
+    <div id="soalContainer"></div>
+  </div>
+
+  <script>
+    // -------------------- DATA SOAL --------------------
+    const soalData = {
+      1: {
+        title: "Soal 1: FCFS - 5 Proses",
+        desc: "Hitung waktu tunggu dan turnaround time dari proses berikut:",
+        columns: ["Proses", "Burst Time"],
+        editable: ["burst"],
+        data: [
+          { proses: "P1", burst: 10 },
+          { proses: "P2", burst: 1 },
+          { proses: "P3", burst: 2 },
+          { proses: "P4", burst: 1 },
+          { proses: "P5", burst: 5 },
+        ]
+      },
+      2: {
+        title: "Soal 2: FCFS - 3 Proses",
+        desc: "Diberikan 3 proses yang tiba bersamaan dan diproses menurut FCFS.",
+        columns: ["Proses", "Burst Time (menit)"],
+        editable: ["burst"],
+        data: [
+          { proses: "P1", burst: 10 },
+          { proses: "P2", burst: 5 },
+          { proses: "P3", burst: 8 },
+        ]
+      },
+      3: {
+        title: "Soal 3: FCFS - 5 Proses",
+        desc: "Diberikan 5 proses yang tiba bersamaan dan diproses menurut FCFS.",
+        columns: ["Nama", "Lama proses (menit)"],
+        editable: ["burst"],
+        data: [
+          { proses: "Rina", burst: 30 },
+          { proses: "Joko", burst: 45 },
+          { proses: "Sari", burst: 25 },
+          { proses: "Toni", burst: 60 },
+          { proses: "Maya", burst: 40 },
+        ]
+      },
+      4: {
+        title: "Soal 4: FCFS - 3 Proses",
+        desc: "Hitung waktu tunggu dan turnaround time tiap proses.",
+        columns: ["Proses", "Burst Time", "Arrival Time"],
+        editable: ["arrival"], // user bisa ubah arrival time
+        data: [
+          { proses: "P1", burst: 16, arrival: 0 },
+          { proses: "P2", burst: 4, arrival: 0 },
+          { proses: "P3", burst: 6, arrival: 0 },
+        ]
+      }
+    };
+
+    // -------------------- RENDER SOAL --------------------
+    function renderSoal() {
+      const container = document.getElementById("soalContainer");
+      container.innerHTML = Object.entries(soalData).map(([id, soal]) => `
+        <div class="card mb-4 shadow-lg">
+          <div class="card-header bg-dark text-white">${soal.title}</div>
+          <div class="card-body">
+            <p class="lead">${soal.desc}</p>
+            <table class="table table-bordered text-center align-middle">
+              <thead class="table-dark">
+                <tr>${soal.columns.map(c => `<th>${c}</th>`).join('')}</tr>
+              </thead>
+              <tbody>
+                ${soal.data.map((p, i) => `
+                  <tr>
+                    <td><strong>${p.proses}</strong></td>
+                    ${soal.columns.includes("Burst Time") || soal.columns.includes("Burst Time (menit)") || soal.columns.includes("Lama proses (menit)") ?
+                      (soal.editable.includes("burst") ?
+                        `<td><input type="number" id="burst-${id}-${i}" value="${p.burst}" class="form-control text-center" min="1"></td>` :
+                        `<td>${p.burst}</td>`) : ''}
+                    ${soal.columns.includes("Arrival Time") ?
+                      (soal.editable.includes("arrival") ?
+                        `<td><input type="number" id="arrival-${id}-${i}" value="${p.arrival}" class="form-control text-center" min="0"></td>` :
+                        `<td>${p.arrival}</td>`) : ""}
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+            <button class="btn btn-dark btn-lg" onclick="solveFCFS(${id})">
+              Hitung FCFS
+            </button>
+            <div id="result-${id}" class="mt-4"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // -------------------- HITUNG FCFS --------------------
+    function solveFCFS(id) {
+      const soal = soalData[id];
+      const updatedData = soal.data.map((p, i) => ({
+        ...p,
+        burst: parseInt(document.getElementById(`burst-${id}-${i}`)?.value || p.burst),
+        arrival: parseInt(document.getElementById(`arrival-${id}-${i}`)?.value || p.arrival || 0)
+      }));
+
+      let time = 0, totalWaiting = 0, totalTurnaround = 0;
+      const results = updatedData.map(p => {
+        const start = Math.max(time, p.arrival);
+        const waiting = start - p.arrival;
+        const finish = start + p.burst;
+        const turnaround = finish - p.arrival;
+        totalWaiting += waiting;
+        totalTurnaround += turnaround;
+        time = finish;
+        return { ...p, start, waiting, turnaround, finish };
+      });
+
+      const avgWaiting = (totalWaiting / updatedData.length).toFixed(2);
+      const avgTurnaround = (totalTurnaround / updatedData.length).toFixed(2);
+
+      // Tampilkan hasil tabel
+      const resultDiv = document.getElementById(`result-${id}`);
+      resultDiv.innerHTML = `
+        <h5 class="fw-bold mb-3">Hasil Perhitungan:</h5>
+        <table class="table table-striped table-hover text-center">
+          <thead class="table-dark">
+            <tr>
+              <th>Proses</th>
+              <th>Waiting Time</th>
+              <th>Turnaround Time</th>
+              <th>Finish Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${results.map(p => `
+              <tr>
+                <td><strong>${p.proses}</strong></td>
+                <td>${p.waiting}</td>
+                <td>${p.turnaround}</td>
+                <td>${p.finish}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        
+        <div class="result-summary">
+          <p><strong>📊 Rata-rata Waiting Time:</strong> <span class="text-primary fs-5">${avgWaiting}</span></p>
+          <p><strong>⏱️ Rata-rata Turnaround Time:</strong> <span class="text-success fs-5">${avgTurnaround}</span></p>
+        </div>
+      `;
+
+      // Tampilkan Gantt Chart
+      drawGanttChart(id, results);
+    }
+
+    // -------------------- GANTT CHART --------------------
+    function drawGanttChart(id, data) {
+      const resultDiv = document.getElementById(`result-${id}`);
+      
+      // Hapus gantt chart lama jika ada
+      const oldGantt = resultDiv.querySelector('.gantt-wrapper');
+      if (oldGantt) oldGantt.remove();
+
+      // Buat wrapper baru
+      const ganttWrapper = document.createElement('div');
+      ganttWrapper.className = 'gantt-wrapper mt-4';
+      
+      // Title
+      const title = document.createElement('div');
+      title.className = 'gantt-chart-title';
+      title.innerHTML = '• Gantt chart';
+      ganttWrapper.appendChild(title);
+
+      // Container untuk bars
+      const ganttContainer = document.createElement('div');
+      ganttContainer.className = 'gantt-container';
+
+      const totalTime = data[data.length - 1].finish;
+
+      // Buat bars
+      data.forEach((p, i) => {
+        const widthPercent = (p.burst / totalTime) * 100;
+        
+        const bar = document.createElement('div');
+        bar.className = 'gantt-bar';
+        bar.style.width = `${widthPercent}%`;
+        bar.style.backgroundColor = getColor(i);
+        bar.textContent = p.proses;
+        bar.style.animation = `growBar 0.8s ease ${i * 0.2}s forwards`;
+        
+        ganttContainer.appendChild(bar);
+      });
+
+      ganttWrapper.appendChild(ganttContainer);
+
+      // Timeline markers
+      const timeline = document.createElement('div');
+      timeline.className = 'gantt-timeline';
+
+      // Buat marker waktu
+      data.forEach((p, i) => {
+        const marker = document.createElement('div');
+        marker.className = 'gantt-time-marker';
+        marker.style.width = `${(p.burst / totalTime) * 100}%`;
+        
+        // Tampilkan waktu start dan finish
+        if (i === 0) {
+          marker.textContent = `${p.start}`;
+        }
+        marker.setAttribute('data-end', p.finish);
+        
+        timeline.appendChild(marker);
+      });
+
+      // Tambahkan angka waktu di bawah
+      const timeNumbers = document.createElement('div');
+      timeNumbers.className = 'd-flex justify-content-between fw-bold mt-2';
+      timeNumbers.style.paddingLeft = '2px';
+      timeNumbers.style.paddingRight = '2px';
+      
+      const times = [0, ...data.map(p => p.finish)];
+      times.forEach((t, i) => {
+        const span = document.createElement('span');
+        span.textContent = t;
+        span.style.flex = i === 0 || i === times.length - 1 ? '0' : '1';
+        span.style.textAlign = i === 0 ? 'left' : (i === times.length - 1 ? 'right' : 'center');
+        timeNumbers.appendChild(span);
+      });
+
+      ganttWrapper.appendChild(timeline);
+      ganttWrapper.appendChild(timeNumbers);
+
+      // Tambahkan ke hasil
+      resultDiv.appendChild(ganttWrapper);
+    }
+
+    // -------------------- WARNA UNTUK GANTT --------------------
+    function getColor(index) {
+      const colors = [
+        '#FFB3BA', // Pink muda
+        '#BAFFC9', // Hijau muda
+        '#BAE1FF', // Biru muda
+        '#FFFFBA', // Kuning muda
+        '#FFD9BA', // Orange muda
+        '#E0BBE4', // Ungu muda
+        '#D4F1F4', // Cyan muda
+        '#FFE5B4'  // Peach
+      ];
+      return colors[index % colors.length];
+    }
+
+    // Render saat halaman dimuat
+    renderSoal();
+  </script>
+</body>
+</html>

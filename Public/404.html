@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Halaman Tidak Ditemukan</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #cad0ee 0%, #59476c 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .container-404 {
+      text-align: center;
+      color: white;
+      z-index: 10;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .error-code {
+      font-size: 180px;
+      font-weight: bold;
+      line-height: 1;
+      margin-bottom: 20px;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      animation: bounce 2s infinite;
+      background: linear-gradient(45deg, #fff, #f0f0f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    .error-icon {
+      font-size: 120px;
+      margin-bottom: 30px;
+      animation: rotate 3s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes rotate {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(-10deg);
+      }
+      75% {
+        transform: rotate(10deg);
+      }
+    }
+
+    .error-title {
+      font-size: 42px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .error-message {
+      font-size: 20px;
+      margin-bottom: 40px;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 15px 40px;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary {
+      background: white;
+      color: #667eea;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      background: #f8f9fa;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Floating elements background */
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .float-item {
+      position: absolute;
+      font-size: 40px;
+      opacity: 0.15;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    .float-item:nth-child(1) {
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .float-item:nth-child(2) {
+      top: 20%;
+      right: 15%;
+      animation-delay: 2s;
+    }
+
+    .float-item:nth-child(3) {
+      bottom: 15%;
+      left: 15%;
+      animation-delay: 4s;
+    }
+
+    .float-item:nth-child(4) {
+      bottom: 20%;
+      right: 10%;
+      animation-delay: 6s;
+    }
+
+    .float-item:nth-child(5) {
+      top: 50%;
+      left: 5%;
+      animation-delay: 8s;
+    }
+
+    .float-item:nth-child(6) {
+      top: 60%;
+      right: 5%;
+      animation-delay: 10s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      25% {
+        transform: translateY(-30px) rotate(5deg);
+      }
+      50% {
+        transform: translateY(-60px) rotate(-5deg);
+      }
+      75% {
+        transform: translateY(-30px) rotate(3deg);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .error-code {
+        font-size: 120px;
+      }
+
+      .error-icon {
+        font-size: 80px;
+      }
+
+      .error-title {
+        font-size: 32px;
+      }
+
+      .error-message {
+        font-size: 18px;
+        padding: 0 20px;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        font-size: 16px;
+      }
+
+      .btn-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .error-code {
+        font-size: 90px;
+      }
+
+      .error-icon {
+        font-size: 60px;
+      }
+
+      .error-title {
+        font-size: 26px;
+      }
+
+      .error-message {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating background elements -->
+  <div class="floating-elements">
+    <div class="float-item">🍽️</div>
+    <div class="float-item">⏱️</div>
+    <div class="float-item">📊</div>
+    <div class="float-item">🛒</div>
+    <div class="float-item">🍜</div>
+    <div class="float-item">🍗</div>
+  </div>
+
+  <div class="container-404">
+    <div class="error-icon">😕</div>
+    <div class="error-code">404</div>
+    <h1 class="error-title">Halaman Tidak Ditemukan</h1>
+    <p class="error-message">
+      Maaf, halaman yang Anda cari tidak ada dalam sistem antrian kami. 
+      Mungkin pesanan ini sudah selesai atau belum pernah ada dalam menu.
+    </p>
+    
+    <div class="btn-container">
+      <a href="/" class="btn btn-primary">
+        <span>🏠</span>
+        <span>Kembali ke Beranda</span>
+      </a>
+      <a href="javascript:history.back()" class="btn btn-secondary">
+        <span>⬅️</span>
+        <span>Halaman Sebelumnya</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Add subtle particle effect on mouse move
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      
+      const floatItems = document.querySelectorAll('.float-item');
+      floatItems.forEach((item, index) => {
+        const speed = (index + 1) * 0.01;
+        const newX = (x - window.innerWidth / 2) * speed;
+        const newY = (y - window.innerHeight / 2) * speed;
+        
+        item.style.transform = `translate(${newX}px, ${newY}px)`;
+      });
+    });
+
+  </script>
+</body>
+</html>
